@@ -100,7 +100,8 @@ else {
                         $atakujacy=+$jednostki_atak[$z];
                         $obrona=+$jednostki_obrona[$z];   
                     }
-                    walka($jednostki_atak, $jednostki_obrona);
+                  walka($jednostki_atak, $jednostki_obrona);
+                $polaczenie->query("delete from ruchy_wojsk where id='$id'");
                 }
             }
             else{
@@ -154,13 +155,10 @@ function walka ($x, $y){
     
     $jednostki_atak_2=sprawdz_jednostki($x);
     $jednostki_obrona_2=sprawdz_jednostki($y);
-    
-    
-   
-    $iterator=0;
-    while ($jednostki_atak_2>0 && $jednostki_obrona_2>0){
+
+   // while (sprawdz_armie($x) && sprawdz_armie($y)){
         for($i=0; $i<6; $i++){
-            echo $kolejnosc[$i];
+            
             if(czy_jest($kolejnosc[$i],$jednostki_atak_2)){
                 $atakowana=losuj_jednostke(jednostki_obrona_2);
                 atak($jednostki_atak[kolejnosc[$i]],jednostki_obrona[atakowana]);
@@ -172,11 +170,18 @@ function walka ($x, $y){
                 atak($jednostki_atak[atakowana],jednostki_obrona[kolejnosc[$i]]);
             }
         }
-    }
+    
     
 }
 function sprawdz_jednostki($x){
-    $jednostki[0]=false;
+    for ($i=0; $i<6 ; $i++){
+        $jednostki[0]=false;
+        $jednostki[1]=false;
+        $jednostki[2]=false;
+        $jednostki[3]=false;
+        $jednostki[4]=false;
+        $jednostki[5]=false;
+    }
     $y=0;
     for($i=0; $i<6; $i++){
         if($x[$i]>0) $jednostki[$y]=true;
@@ -184,6 +189,7 @@ function sprawdz_jednostki($x){
     }
     return $jednostki;
 }
+
 function losuj_jednostke($x){
     $jednostki[0]=0;
     $y=0;
@@ -217,6 +223,11 @@ function czy_jest ($x, $y){
     if($y[$x]) return true;
     else return false;
 }
-
+function sprawdz_armie($x){
+    for($i=0; $i<6; $i++){
+        if($x[$i]>0) return true;
+    }
+    return false;
+}
 
 ?>
